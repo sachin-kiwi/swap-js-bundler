@@ -1,4 +1,4 @@
-import { SwapUtility } from "./swapUtility";
+import SwapUtility from "./swapUtility";
 function App() {
   new SwapUtility({Divid: "swap", appId: "test"})
   return (
