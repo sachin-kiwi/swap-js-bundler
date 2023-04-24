@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "buildMoudle": "node utils/build.js",
+    "buildModule": "node utils/build.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
