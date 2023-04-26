@@ -1,60 +1,23 @@
-import { makeApiRequest } from '../api'
 import $ from 'jquery'
+import React from "react";
+import ReactDOMServer from 'react-dom/server';
+const jsxToHtml = (input) => ReactDOMServer.renderToString(input)
 
-export const addListenersToButton = (id, event = 'click') => {
-  document.addEventListener('click', function (e) {
-    const walletConnect = e.target.closest('#walletConnectButton')
-    if (walletConnect) {
-      alert('wallet connect is clicked')
-    }
-  })
-}
-
-export const getAppScreen = async (appId) => {
-  let data = {}
+export const getAppScreen = async (appId,data) => {
+  let ui = ''
   try {
-    data = await makeApiRequest(
-      'http://localhost:8001/api/v1/app/fetchAppOptions',
-      'POST',
-      { appId },
-    ).then((data) => data[0])
+    ui =  jsxToHtml(<SwapScreen appId={appId} data={data}/>)
   } catch (error) {
     console.log(error)
     return `<div>Something Went Wrong.Please checks console</div>`
   }
-  return `
-        <tbody>
-            <tr>
-                <td>Address Pair</td>
-                <td>
-                ${data.addressPair
-                  .map(
-                    (pair) => `
-                <div>
-                    <span>${pair.name} (${pair.symbol})</span>
-                    <img src="${pair.logo}" alt="${pair.name} logo" />
-                </div>
-                `,
-                  )
-                  .join('')}
-                </td>
-            </tr>
-            <tr>
-                <td>Liquidity at Registration</td>
-                <td>${data.liqudityAtRegistration}</td>
-            </tr>
-            <tr>
-                <td>Current Liquidity</td>
-                <td>${data.currentLiquidity}</td>
-            </tr>
-        </tbody>
-
-    `
+  return ui
 }
 
-export const getElementByIdOrCreate = async (screenId, appId) => {
+export const getElementByIdOrCreate = async (screenId, appId,data) => {
+  let element = null
   try {
-    let element = document.getElementById(screenId)
+    element = document.getElementById(screenId)
     if (!element) {
       // Element doesn't exist, so create it
       const parent = document.createElement('div')
@@ -72,11 +35,31 @@ export const getElementByIdOrCreate = async (screenId, appId) => {
       )
       $(`#${screenId}`).empty()
     }
-    const htmlToAdd = await getAppScreen(appId)
+    const htmlToAdd = await getAppScreen(appId,data)
     element.innerHTML = htmlToAdd
     return element
   } catch (error) {
     console.log(error)
-    return null
   }
+  return element
+}
+
+const SwapScreen = (props)=>{
+    const {appId,data:{addressPair}} = props
+    return <>
+        <section id={`swap-utlity-container-${appId}`}>
+            <h1 id={`title-${appId}`}>Swap Utility</h1>
+            <form id={`swap-utility-form-${appId}`}>
+                <label form="tokenA">{`${addressPair[0].name}`}</label>
+                <input type="text" id={`tokenA-value-${appId}`} placeholder={`${addressPair[0].symbol}`}/>
+                <br/>
+                <label form="tokenB">{`${addressPair[1].name}`}</label>
+                <input type="text" id={`tokenB-value-${appId}`} placeholder={`${addressPair[1].symbol}`}/>
+                <br/>
+                <input type='submit' id={`get-quote-${appId}`} value='Get Quote'/>
+                <br/>
+                <input type='submit' id={`swap-token-${appId}`} value='Swap Token'/>
+            </form>
+        </section>
+    </>
 }

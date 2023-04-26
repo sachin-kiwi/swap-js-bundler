@@ -7,8 +7,8 @@ function makeApiRequest(url,type='GET',data={}) {
     dataType: 'json',
     contentType: 'application/json',
     data: JSON.stringify(data),
-    success: function(data) {
-      return data
+    success: function(result) {
+      return result
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('Error: ' + textStatus + ' - ' + errorThrown);
