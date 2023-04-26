@@ -1,12 +1,8 @@
 import SwapUtility from "./swapUtility";
 function App() {
-  new SwapUtility({Divid: "swap", appId: "test"})
+  new SwapUtility({screenId: "swap", appId: "64411e580b5a95672ebcd08d"})
   return (
     <>
-     <h1>
-      Testing swap
-    </h1>
-    <div id="swap" />
     </>
   );
 }

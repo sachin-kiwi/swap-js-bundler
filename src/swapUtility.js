@@ -1,18 +1,25 @@
 import $ from "jquery";
-import {getWalletConnectScreen, addListnersToButton } from './helper';
+import {getElementByIdOrCreate } from './helper/screens/appScreen';
 
 class SwapUtility {
-    constructor({Divid, appId}) {
-    $(document).ready(function() {
-        const parent = document.getElementById(Divid);
-        const checkCount = $(`#${Divid}`).children( "div" );
-            if (checkCount && checkCount?.length === 0) {
-                addListnersToButton();
-                const htmlToAdd = getWalletConnectScreen({});
-                parent.innerHTML = htmlToAdd;
-            }
-        })
+    constructor({screenId, appId}) {
+        this.screenId = screenId
+        this.appId = appId
+        this.bootUp = false
+        this.init(screenId,appId)
     }
+
+    async init(screenId,appId){
+        try {
+            $(document).ready(async function() {
+                this.element = await getElementByIdOrCreate(screenId,appId)
+            })
+            this.bootUp = true
+        } catch (error) {
+            console.log(error)
+        }  
+    }
+
 }
 
 export default SwapUtility;
