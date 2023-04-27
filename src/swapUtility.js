@@ -14,10 +14,16 @@ class SwapUtility {
     async init(screenId,appId){
         try {
             $(document).ready(async function() {
-                const data = await makeApiRequest(appURL.fetchApp,ACTIONS.post,{ appId }).then(data=>data[0])
-                this.element = await createSwapUtlityScreen(screenId,appId,data)
-                FormListener('swapScreen',appId)
-                this.screenName = 'swapScreen'
+                let data = {}
+                try {
+                    data = await makeApiRequest(appURL.fetchApp,ACTIONS.post,{ appId }).then(data=>data[0])
+                } catch (error) {
+                    console.log(error)
+                }
+                const {element,hasError} = await createSwapUtlityScreen(screenId,appId,data)
+                this.element = element
+                !hasError && FormListener('swapScreen',appId)
+                this.screenName = 'swapScreen' 
             })
             this.bootUp = true
         } catch (error) {

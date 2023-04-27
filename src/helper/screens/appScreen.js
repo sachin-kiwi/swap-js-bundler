@@ -4,17 +4,23 @@ import { createSearchKeyWord } from './utilities'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
+  let hasError = false
   try {
+    if (typeof data !== 'object' || Object.entries(data).length === 0){
+      throw new Error('Fetched empty Data for screen populate.Please check with admin')
+    }
     ui = SwapScreen({appId,data})
   } catch (error) {
     console.log(error)
-    return `<div>Something Went Wrong.Please checks console</div>`
+    ui = `<div>Something Went Wrong.Please checks console</div>`
+    hasError = true
   }
-  return ui
+  return {ui,hasError}
 }
 
 export const createSwapUtlityScreen = async (screenId, appId,data) => {
   let element = null
+  let hasError = false
   try {
     element = document.getElementById(screenId)
     if (!element) {
@@ -24,12 +30,13 @@ export const createSwapUtlityScreen = async (screenId, appId,data) => {
     // Element already exists, check if it's unique and has no child elements
     // If Child exist then remove them first before changing html
     clearComponent(screenId)
-    element.innerHTML = await getAppScreen(appId,data)
-    return element
+    const {ui,hasError:foundError} = await getAppScreen(appId,data)
+    hasError = foundError === true
+    element.innerHTML = ui
   } catch (error) {
     console.log(error)
   }
-  return element
+  return {element,hasError}
 }
 
 const createComponent = (id,type='div')=>{
