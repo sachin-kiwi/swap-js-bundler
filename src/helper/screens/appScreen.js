@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import { SwapScreen, swapFormListener } from './swapScreen'
-import { jsxToHtml } from './utilities'
+import { createSearchKeyWord, jsxToHtml } from './utilities'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -40,7 +40,7 @@ const createComponent = (id,type='div')=>{
 }
 
 const clearComponent = (id,type='id')=>{
-  const name =`${type==='id'? '#':''}${id}`
+  const name = createSearchKeyWord(id,type)
   if ($(name).children().length !== 0){
     $(name).empty()
     console.log(`Component is empty now :${name}`)
