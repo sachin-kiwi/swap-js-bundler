@@ -1,11 +1,11 @@
 import $ from 'jquery'
 import { SwapScreen, swapFormListener } from './swapScreen'
-import { createSearchKeyWord, jsxToHtml } from './utilities'
+import { createSearchKeyWord } from './utilities'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
   try {
-    ui =  jsxToHtml(<SwapScreen appId={appId} data={data}/>)
+    ui = SwapScreen({appId,data})
   } catch (error) {
     console.log(error)
     return `<div>Something Went Wrong.Please checks console</div>`

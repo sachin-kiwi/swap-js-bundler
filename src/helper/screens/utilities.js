@@ -1,6 +1,3 @@
-import ReactDOMServer from 'react-dom/server';
-export const jsxToHtml = (input) => ReactDOMServer.renderToString(input)
-
 export const createSearchKeyWord = (ele,type='id') => {
     let result = ''
     switch (type) {
