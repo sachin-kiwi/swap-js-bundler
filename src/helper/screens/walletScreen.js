@@ -20,43 +20,14 @@ export const walletFormListener = (appId) => {
   const disConnectBtn = document.getElementById(`disConnect-walletScreen-${appId}`)
   const swapScreen = document.getElementById(`swap-utlity-container-${appId}`)
   const walletScreen = document.getElementById(`walletScreen-container-${appId}`)
-//   const exchangeBtn = document.getElementById(`exchange-icon-${appId}`)
   connectBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    // const isValid = swapScreenFormValidation(appId, alertBox)
-    // if (!isValid) {
-    //   return
-    // }
-    // const { from, to } = await fetchInputDetails(appId)
-    // const payload = {
-    //   appId,
-    //   from,
-    //   to,
-    // }
-    // const data = await makeApiRequest(appURL.getQuotes, ACTIONS.post, payload)
-    // console.log(data)
     alertBox.showAlert('Connected','success')
     swapScreen.style.display = 'block'
     walletScreen.style.display = 'none'
   })
-//   exchangeBtn.addEventListener('click', async function (e) {
-//     e.preventDefault()
-//     setExchangeFields(appId)
-//   })
   disConnectBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    // const isValid = swapScreenFormValidation(appId, alertBox)
-    // if (!isValid) {
-    //   return
-    // }
-    // const { from, to } = await fetchInputDetails(appId)
-    // const payload = {
-    //   appId,
-    //   from,
-    //   to,
-    // }
-    // const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
-    // console.log(data)
     alertBox.showAlert('Disconnected','info')
     connectBtn.style.display = 'block'
     disConnectBtn.style.display = 'none'

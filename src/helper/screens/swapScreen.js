@@ -20,17 +20,26 @@ export const SwapScreen = (props) => {
     <span id="exchange-icon-${appId}" style="font-size: 2em; cursor: pointer;">&#8597;</span>
     <div id="tokenB" style="margin-bottom: 1rem;">
     <label form="tokenB" id="tokenB-label-${appId}" style="font-weight: bold;">${addressPair[1].symbol}</label>
-    <input type="number" id="tokenB-value-${appId}" data-address="${addressPair[1].address}" placeholder="${addressPair[1].name}" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    <input type="number" id="tokenB-value-${appId}" class=disable-btn disabled data-address="${addressPair[1].address}" placeholder="${addressPair[1].name}" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
     </div>
-    <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
-    <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
-    <div id="checkbox-options-${appId}" style="margin-bottom: 1rem;">
+    <div id="misc-${appId}" style="margin-bottom:1rem;">
+    <label form="slippage" id="slippage-label-${appId}" style="font-weight: bold;">Tolerance (%)</label>
+    <input type="number" id="slippage-value-${appId}" placeholder="0" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    <div id="misc-options-${appId}" style="margin-bottom: 1rem;">
     <label form="raw-tx" style="font-weight: bold;">Is Raw Tx?</label>
     <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
     </div>
+    </div>
+    <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
+    <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
     </form>
     <input type="submit" id="disConnect-swapScreen-${appId}" value="DisConnect" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem; margin-top: 1rem; width: 100%;"/>
     </section>
+    <style>
+    .disable-btn{
+      background-color:lightgray;
+    }
+    </style>
   `
 }
 
@@ -46,14 +55,13 @@ export const swapFormListener = (appId) => {
     if (!isValid) {
       return
     }
-    const { from, to } = await fetchInputDetails(appId)
+    const { from, to } = await fetchInputDetails(appId,alertBox)
     const payload = {
       appId,
       from,
       to,
     }
     const data = await makeApiRequest(appURL.getQuotes, ACTIONS.post, payload)
-    console.log(data)
     alertBox.showAlert('Latest quote recieved','success')
   })
   exchangeBtn.addEventListener('click', async function (e) {
@@ -73,7 +81,6 @@ export const swapFormListener = (appId) => {
       to,
     }
     const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
-    console.log(data)
     alertBox.showAlert('swap raw tx recieved','success')
   })
 
@@ -91,7 +98,6 @@ export const swapFormListener = (appId) => {
 export const swapScreenFormValidation = (appId, alertBox) => {
   const tokenA = $(createSearchKeyWord(`tokenA-value-${appId}`, 'id')).val()
   const tokenB = $(createSearchKeyWord(`tokenB-value-${appId}`, 'id')).val()
-  console.log(tokenA, tokenB)
   if (tokenA === '' || tokenB === '') {
     alertBox.showAlert('please enter all details before submitting')
     return false
@@ -102,53 +108,22 @@ export const swapScreenFormValidation = (appId, alertBox) => {
 const setExchangeFields = (appId) => {
   const form = document.getElementById(`swap-utility-form-${appId}`)
   if (!form) return
-
-  const [tokenAInput, tokenALabel, tokenBInput, tokenBLabel] = [
-    '#tokenA input',
-    '#tokenA label',
-    '#tokenB input',
-    '#tokenB label',
-  ].map((selector) => form.querySelector(selector))
-  const [placeholderA, placeholderB] = [tokenAInput, tokenBInput].map(
-    (input) => input.placeholder,
-  )
-  const [dataA, dataB] = [tokenAInput, tokenBInput].map(
-    (input) => input.dataset.address,
-  )
-  const [labelA, labelB] = [tokenALabel, tokenBLabel].map(
-    (input) => input.innerHTML,
-  )
-
-  // Save the original values
-  const originalValues = {
-    placeholderA: tokenAInput.placeholder,
-    placeholderB: tokenBInput.placeholder,
-    dataA: tokenAInput.dataset.address,
-    dataB: tokenBInput.dataset.address,
-    labelA: tokenALabel.innerHTML,
-    labelB: tokenBLabel.innerHTML,
-  }
-
-  try {
-    tokenAInput.placeholder = placeholderB
-    tokenAInput.dataset.address = dataB
-    tokenALabel.innerHTML = labelB
-    tokenBLabel.innerHTML = labelA
-    tokenBInput.placeholder = placeholderA
-    tokenBInput.dataset.address = dataA
-  } catch (error) {
-    // If an error occurs, revert back to the original values
-    tokenAInput.placeholder = originalValues.placeholderA
-    tokenBInput.placeholder = originalValues.placeholderB
-    tokenAInput.dataset.address = originalValues.dataA
-    tokenBInput.dataset.address = originalValues.dataB
-    tokenALabel.innerHTML = originalValues.labelA
-    tokenBLabel.innerHTML = originalValues.labelB
-    console.log(error)
+  const [tokenAInput, tokenBInput] = ['#tokenA input','#tokenB input',]
+    .map((selector) => form.querySelector(selector))
+  if (tokenAInput.disabled){
+    tokenAInput.disabled=false
+    tokenBInput.disabled = true
+    tokenBInput.classList.add('disable-btn')
+    tokenAInput.classList.remove('disable-btn')
+  }else{
+    tokenAInput.disabled=true
+    tokenBInput.disabled = false
+    tokenAInput.classList.add('disable-btn')
+    tokenBInput.classList.remove('disable-btn')
   }
 }
 
-const fetchInputDetails = (appId) => {
+const fetchInputDetails = (appId,alertBox) => {
   try {
     const form = document.getElementById(`swap-utility-form-${appId}`)
     if (!form) return
@@ -169,5 +144,6 @@ const fetchInputDetails = (appId) => {
     }
   } catch (error) {
     console.log(error)
+    alertBox.showAlert(error.message)
   }
 }
