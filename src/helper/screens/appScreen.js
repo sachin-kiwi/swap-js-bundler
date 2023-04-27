@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import { SwapScreen, swapFormListener } from './swapScreen'
 import { createSearchKeyWord } from './utilities'
+import { WalletScreen, walletFormListener } from './walletScreen'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -9,7 +10,8 @@ export const getAppScreen = async (appId,data) => {
     if (typeof data !== 'object' || Object.entries(data).length === 0){
       throw new Error('Fetched empty Data for screen populate.Please check with admin')
     }
-    ui = SwapScreen({appId,data})
+    // ui = screenName === 'swapScreen'? SwapScreen({appId,data}) :  WalletScreen({appId,data})
+    ui = SwapScreen({appId,data}) +  WalletScreen({appId,data})
   } catch (error) {
     console.log(error)
     ui = `<div>Something Went Wrong.Please checks console</div>`
@@ -21,6 +23,7 @@ export const getAppScreen = async (appId,data) => {
 export const createSwapUtlityScreen = async (screenId, appId,data) => {
   let element = null
   let hasError = false
+  let screen
   try {
     element = document.getElementById(screenId)
     if (!element) {
@@ -55,11 +58,8 @@ const clearComponent = (id,type='id')=>{
 }
 
 export const FormListener = (screenName,appId)=>{
-  if (screenName === 'swapScreen'){
-    swapFormListener(appId)
-  }else{
-    //do nothing
-  }
+  swapFormListener(appId)
+  walletFormListener(appId)
 }
 
 export const switchAppScreen = (screenId,appId,screenName) =>{

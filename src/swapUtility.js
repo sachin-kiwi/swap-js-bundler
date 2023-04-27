@@ -20,10 +20,10 @@ class SwapUtility {
                 } catch (error) {
                     console.log(error)
                 }
-                const {element,hasError} = await createSwapUtlityScreen(screenId,appId,data)
+                const {element,hasError,screenName} = await createSwapUtlityScreen(screenId,appId,data,'walletScreen')
                 this.element = element
-                !hasError && FormListener('swapScreen',appId)
-                this.screenName = 'swapScreen' 
+                !hasError && FormListener(screenName,appId)
+                this.screenName = screenName
             })
             this.bootUp = true
         } catch (error) {

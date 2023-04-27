@@ -10,7 +10,7 @@ export const SwapScreen = (props) => {
     data: { addressPair },
   } = props
   return `
-    <section id="swap-utlity-container-${appId}" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <section id="swap-utlity-container-${appId}" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; border: 3px solid; min-width:500px; padding:1rem">
     <h1 id="title-${appId}" style="font-size: 2rem; font-weight: bold; text-align: center;">${appName}</h1>
     <form id="swap-utility-form-${appId}" style="display: flex; flex-direction: column; align-items: center;">
     <div id="tokenA" style="">
@@ -29,6 +29,7 @@ export const SwapScreen = (props) => {
     <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
     <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem;"/>
     </form>
+    <input type="submit" id="disConnect-swapScreen-${appId}" value="DisConnect" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem; margin-top: 1rem; width: 100%;"/>
     </section>
   `
 }
@@ -38,6 +39,7 @@ export const swapFormListener = (appId) => {
   const quoteBtn = document.getElementById(`get-quote-${appId}`)
   const swapBtn = document.getElementById(`swap-token-${appId}`)
   const exchangeBtn = document.getElementById(`exchange-icon-${appId}`)
+  const disConnectBtn = document.getElementById(`disConnect-swapScreen-${appId}`)
   quoteBtn.addEventListener('click', async function (e) {
     e.preventDefault()
     const isValid = swapScreenFormValidation(appId, alertBox)
@@ -73,6 +75,16 @@ export const swapFormListener = (appId) => {
     const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
     console.log(data)
     alertBox.showAlert('swap raw tx recieved')
+  })
+
+  disConnectBtn.addEventListener('click', async function (e) {
+    e.preventDefault()
+    const swapScreen = document.getElementById(`swap-utlity-container-${appId}`)
+    const walletScreen = document.getElementById(`walletScreen-container-${appId}`)
+    swapScreen.style.display = 'none'
+    walletScreen.style.display = 'block'
+    alertBox.showAlert('Disconnected')
+
   })
 }
 
