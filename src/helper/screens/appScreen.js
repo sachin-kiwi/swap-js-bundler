@@ -1,7 +1,6 @@
 import $ from 'jquery'
-import React from "react";
-import ReactDOMServer from 'react-dom/server';
-const jsxToHtml = (input) => ReactDOMServer.renderToString(input)
+import { SwapScreen } from './swapScreen'
+import { jsxToHtml } from './utilities'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -46,24 +45,4 @@ const clearComponent = (id,type='id')=>{
     $(name).empty()
     console.log(`Component is empty now :${name}`)
   }
-}
-
-const SwapScreen = (props)=>{
-    const {appId,data:{addressPair}} = props
-    return <>
-        <section id={`swap-utlity-container-${appId}`}>
-            <h1 id={`title-${appId}`}>Swap Utility</h1>
-            <form id={`swap-utility-form-${appId}`}>
-                <label form="tokenA">{`${addressPair[0].name}`}</label>
-                <input type="text" id={`tokenA-value-${appId}`} placeholder={`${addressPair[0].symbol}`}/>
-                <br/>
-                <label form="tokenB">{`${addressPair[1].name}`}</label>
-                <input type="text" id={`tokenB-value-${appId}`} placeholder={`${addressPair[1].symbol}`}/>
-                <br/>
-                <input type='submit' id={`get-quote-${appId}`} value='Get Quote'/>
-                <br/>
-                <input type='submit' id={`swap-token-${appId}`} value='Swap Token'/>
-            </form>
-        </section>
-    </>
 }
