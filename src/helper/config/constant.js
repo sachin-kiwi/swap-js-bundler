@@ -11,3 +11,10 @@ export const ACTIONS = {
     post: 'POST',
     get: 'GET'
 }
+
+export const alertColorSchema = {
+  error:'red',
+  success:'green',
+  warn:'yellow',
+  info:'black', 
+}

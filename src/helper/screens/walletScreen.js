@@ -35,7 +35,7 @@ export const walletFormListener = (appId) => {
     // }
     // const data = await makeApiRequest(appURL.getQuotes, ACTIONS.post, payload)
     // console.log(data)
-    alertBox.showAlert('Connected')
+    alertBox.showAlert('Connected','success')
     swapScreen.style.display = 'block'
     walletScreen.style.display = 'none'
   })
@@ -57,7 +57,7 @@ export const walletFormListener = (appId) => {
     // }
     // const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
     // console.log(data)
-    alertBox.showAlert('Disconnected')
+    alertBox.showAlert('Disconnected','info')
     connectBtn.style.display = 'block'
     disConnectBtn.style.display = 'none'
     swapScreen.style.display = 'none'

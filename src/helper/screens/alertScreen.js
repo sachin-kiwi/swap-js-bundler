@@ -1,3 +1,5 @@
+import { alertColorSchema } from "../config/constant";
+
 export default class Alert {
   constructor(appId) {
     const element = document.getElementById(`alert-popup-${appId}`)
@@ -9,10 +11,18 @@ export default class Alert {
         document.body.appendChild(this.popup)   
     }
     this.popup.style.display = 'none';
+    this.popup.style.position = 'fixed';
+    this.popup.style.top = '10px';
+    this.popup.style.right = '10px';
+    this.popup.style.backgroundColor = '#fff';
+    this.popup.style.border = '1px solid #ccc';
+    this.popup.style.padding = '10px';
   }
 
-  showAlert(message) {
+  showAlert(message,type='error') {
     this.popup.textContent = message;
+    this.popup.style.color = alertColorSchema.hasOwnProperty(type) 
+      ? alertColorSchema[type] : 'black'
     this.popup.style.display = 'block';
     setTimeout(() => {
         this.popup.textContent = '';

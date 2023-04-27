@@ -22,12 +22,12 @@ export const SwapScreen = (props) => {
     <label form="tokenB" id="tokenB-label-${appId}" style="font-weight: bold;">${addressPair[1].symbol}</label>
     <input type="number" id="tokenB-value-${appId}" data-address="${addressPair[1].address}" placeholder="${addressPair[1].name}" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
     </div>
+    <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
+    <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
     <div id="checkbox-options-${appId}" style="margin-bottom: 1rem;">
     <label form="raw-tx" style="font-weight: bold;">Is Raw Tx?</label>
     <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
     </div>
-    <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
-    <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem;"/>
     </form>
     <input type="submit" id="disConnect-swapScreen-${appId}" value="DisConnect" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem; margin-top: 1rem; width: 100%;"/>
     </section>
@@ -54,7 +54,7 @@ export const swapFormListener = (appId) => {
     }
     const data = await makeApiRequest(appURL.getQuotes, ACTIONS.post, payload)
     console.log(data)
-    alertBox.showAlert('Latest quote recieved')
+    alertBox.showAlert('Latest quote recieved','success')
   })
   exchangeBtn.addEventListener('click', async function (e) {
     e.preventDefault()
@@ -74,7 +74,7 @@ export const swapFormListener = (appId) => {
     }
     const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
     console.log(data)
-    alertBox.showAlert('swap raw tx recieved')
+    alertBox.showAlert('swap raw tx recieved','success')
   })
 
   disConnectBtn.addEventListener('click', async function (e) {
@@ -83,7 +83,7 @@ export const swapFormListener = (appId) => {
     const walletScreen = document.getElementById(`walletScreen-container-${appId}`)
     swapScreen.style.display = 'none'
     walletScreen.style.display = 'block'
-    alertBox.showAlert('Disconnected')
+    alertBox.showAlert('Disconnected','info')
 
   })
 }
