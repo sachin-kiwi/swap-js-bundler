@@ -13,11 +13,16 @@ export const SwapScreen = (props)=>{
                     <input type="number" id={`tokenA-value-${appId}`} data-address={`${addressPair[0].address}`} placeholder={`${addressPair[0].symbol}`}/>
                 </div>
                 <br/>
-                <span id={`exchange-icon-${appId}`} style={{paddingLeft:'3rem'}}>&#8597;</span>
+                <span id={`exchange-icon-${appId}`} style={{padding:'2rem',fontSize:'2em',cursor:'pointer'}}>&#8597;</span>
                 <br/>
                 <div id="tokenB">
                     <label form="tokenB" id={`tokenB-label-${appId}`}>{`${addressPair[1].name}`}</label>
                     <input type="number" id={`tokenB-value-${appId}`} data-address={`${addressPair[1].address}`} placeholder={`${addressPair[1].symbol}`}/>
+                </div>
+                <br/>
+                <div id={`checkbox-options-${appId}`}>
+                    <label form="raw-tx">Is Raw Tx?</label>
+                    <input type="checkbox" id={`rawTx-option-${appId}`} name="raw-tx-option" checked={true}/>
                 </div>
                 <br/>
                 <input type='submit' id={`get-quote-${appId}`} value='Get Quote'/>
@@ -73,6 +78,7 @@ export const swapFormListener = (appId) => {
 export const swapScreenFormValidation = (appId)=>{
     const tokenA = $(createSearchKeyWord(`tokenA-value-${appId}`,'id')).val()
     const tokenB = $(createSearchKeyWord(`tokenB-value-${appId}`,'id')).val()
+    console.log(tokenA,tokenB)
     if (tokenA === '' || tokenB === ''){
         console.log('please enter all details before submitting')
         return false
@@ -124,14 +130,13 @@ const fetchInputDetails = (appId)=>{
     try {
         const form = document.getElementById(`swap-utility-form-${appId}`);
         if (!form) return;
-        
-        const [tokenAInput, tokenALabel, tokenBInput, tokenBLabel] = [
-        '#tokenA input', '#tokenA label', '#tokenB input', '#tokenB label'
-        ].map(selector => form.querySelector(selector));
+        const [tokenAInput, tokenBInput] = ['#tokenA input', '#tokenB input']
+            .map(selector => form.querySelector(selector));
+        const isRawTx = form.querySelector(`#rawTx-option-${appId}`).checked
         const [tokenA, tokenB] = [tokenAInput, tokenBInput].map(input => {
             return {address:input.dataset.address,amount:input.value}
         });
-        return {from:tokenA.address,amountIn:tokenA.amount,to:tokenB.address,amountOut:tokenB.amount}
+        return {from:tokenA.address,amountIn:tokenA.amount,to:tokenB.address,amountOut:tokenB.amount,isRawTx}
     } catch (error) {
         console.log(error)
     }
