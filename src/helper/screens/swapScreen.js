@@ -10,32 +10,27 @@ export const SwapScreen = (props) => {
     data: { addressPair },
   } = props
   return `
-        <section id="swap-utlity-container-${appId}">
-            <h1 id="title-${appId}">${appName}</h1>
-            <form id="swap-utility-form-${appId}">
-                <div id="tokenA">
-                    <label form="tokenA" id="tokenA-label-${appId}">${addressPair[0].name}</label>
-                    <input type="number" id="tokenA-value-${appId}" data-address="${addressPair[0].address}" placeholder="${addressPair[0].symbol}"/>
-                </div>
-                <br/>
-                <span id="exchange-icon-${appId}" style="padding: 2rem; font-size: 2em; cursor: pointer">&#8597;</span>
-                <br/>
-                <div id="tokenB">
-                    <label form="tokenB" id="tokenB-label-${appId}">${addressPair[1].name}</label>
-                    <input type="number" id="tokenB-value-${appId}" data-address="${addressPair[1].address}" placeholder="${addressPair[1].symbol}"/>
-                </div>
-                <br/>
-                <div id="checkbox-options-${appId}">
-                    <label form="raw-tx">Is Raw Tx?</label>
-                    <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
-                </div>
-                <br/>
-                <input type="submit" id="get-quote-${appId}" value="Get Quote"/>
-                <br/>
-                <input type="submit" id="swap-token-${appId}" value="Swap Token"/>
-            </form>
-        </section>
-    `
+    <section id="swap-utlity-container-${appId}" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <h1 id="title-${appId}" style="font-size: 2rem; font-weight: bold; text-align: center;">${appName}</h1>
+    <form id="swap-utility-form-${appId}" style="display: flex; flex-direction: column; align-items: center;">
+    <div id="tokenA" style="">
+    <label form="tokenA" id="tokenA-label-${appId}" style="font-weight: bold;">${addressPair[0].symbol}</label>
+    <input type="number" id="tokenA-value-${appId}" data-address="${addressPair[0].address}" placeholder="${addressPair[0].name}" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    </div>
+    <span id="exchange-icon-${appId}" style="font-size: 2em; cursor: pointer;">&#8597;</span>
+    <div id="tokenB" style="margin-bottom: 1rem;">
+    <label form="tokenB" id="tokenB-label-${appId}" style="font-weight: bold;">${addressPair[1].symbol}</label>
+    <input type="number" id="tokenB-value-${appId}" data-address="${addressPair[1].address}" placeholder="${addressPair[1].name}" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    </div>
+    <div id="checkbox-options-${appId}" style="margin-bottom: 1rem;">
+    <label form="raw-tx" style="font-weight: bold;">Is Raw Tx?</label>
+    <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
+    </div>
+    <input type="submit" id="get-quote-${appId}" value="Get Quote" style="background-color: lightgray; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem; margin-bottom: 1rem;"/>
+    <input type="submit" id="swap-token-${appId}" value="Swap Token" style="background-color: lightblue; border: none; border-radius: 0.25rem; padding: 0.5rem 1rem;"/>
+    </form>
+    </section>
+  `
 }
 
 export const swapFormListener = (appId) => {
@@ -45,7 +40,7 @@ export const swapFormListener = (appId) => {
   const exchangeBtn = document.getElementById(`exchange-icon-${appId}`)
   quoteBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    const isValid = swapScreenFormValidation(appId,alertBox)
+    const isValid = swapScreenFormValidation(appId, alertBox)
     if (!isValid) {
       return
     }
@@ -65,7 +60,7 @@ export const swapFormListener = (appId) => {
   })
   swapBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    const isValid = swapScreenFormValidation(appId)
+    const isValid = swapScreenFormValidation(appId, alertBox)
     if (!isValid) {
       return
     }
@@ -81,7 +76,7 @@ export const swapFormListener = (appId) => {
   })
 }
 
-export const swapScreenFormValidation = (appId,alertBox) => {
+export const swapScreenFormValidation = (appId, alertBox) => {
   const tokenA = $(createSearchKeyWord(`tokenA-value-${appId}`, 'id')).val()
   const tokenB = $(createSearchKeyWord(`tokenB-value-${appId}`, 'id')).val()
   console.log(tokenA, tokenB)
