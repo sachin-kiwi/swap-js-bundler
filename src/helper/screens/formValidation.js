@@ -4,15 +4,27 @@ export const addFormListener = (appId) => {
     console.log(appId)
     const quoteBtn = document.getElementById(`get-quote-${appId}`)
     const swapBtn = document.getElementById(`swap-token-${appId}`)
-    console.log(quoteBtn)
     quoteBtn.addEventListener("click", async function(e){
         e.preventDefault();
-        const data = await makeApiRequest('http://localhost:8001/api/v1/app/fetchAppOptions','POST',{ appId }).then(data=>data[0])
-        alert('Latest quote recived')
+        const payload ={
+            "appId":"64411e580b5a95672ebcd08d",
+            "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+            "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
+        }
+        const data = await makeApiRequest('http://localhost:8001/api/v1/app/get-quote','POST',payload)
+        console.log(data)
+        alert('Latest quote recieved')
     });
     swapBtn.addEventListener("click", async function(e){
         e.preventDefault();
-        const data = await makeApiRequest('http://localhost:8001/api/v1/app/fetchAppOptions','POST',{ appId }).then(data=>data[0])
+        const payload = {
+            "appId":"64411e580b5a95672ebcd08d",
+            "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+            "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
+        }
+        const data = await makeApiRequest('http://localhost:8001/api/v1/app/swap-token','POST',payload)
+        console.log(data)
         alert('swap raw tx recieved')
     });
 }
+
