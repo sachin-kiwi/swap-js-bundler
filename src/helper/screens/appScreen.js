@@ -14,34 +14,38 @@ export const getAppScreen = async (appId,data) => {
   return ui
 }
 
-export const getElementByIdOrCreate = async (screenId, appId,data) => {
+export const createSwapUtlityScreen = async (screenId, appId,data) => {
   let element = null
   try {
     element = document.getElementById(screenId)
     if (!element) {
-      // Element doesn't exist, so create it
-      const parent = document.createElement('div')
-      parent.setAttribute('id', screenId)
-      document.body.appendChild(parent)
-      element = parent
-      console.log('creating element')
+      element = createComponent(screenId)
+      console.log('created swap utlity screen element')
     }
     // Element already exists, check if it's unique and has no child elements
-    // If Child exist then delete them first
-    const childrenCount = $(`#${screenId}`).children().length
-    if (childrenCount !== 0) {
-      console.log(
-        `Element with ID ${screenId} have ${childrenCount} child elements exist and deleting it`,
-      )
-      $(`#${screenId}`).empty()
-    }
-    const htmlToAdd = await getAppScreen(appId,data)
-    element.innerHTML = htmlToAdd
+    // If Child exist then remove them first before changing html
+    clearComponent(screenId)
+    element.innerHTML = await getAppScreen(appId,data)
     return element
   } catch (error) {
     console.log(error)
   }
   return element
+}
+
+const createComponent = (id,type='div')=>{
+  const element = document.createElement(type)
+  element.setAttribute('id', id)
+  document.body.appendChild(element)
+  return element
+}
+
+const clearComponent = (id,type='id')=>{
+  const name =`${type==='id'? '#':''}${id}`
+  if ($(name).children().length !== 0){
+    $(name).empty()
+    console.log(`Component is empty now :${name}`)
+  }
 }
 
 const SwapScreen = (props)=>{

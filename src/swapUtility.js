@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {getElementByIdOrCreate } from './helper/screens/appScreen';
+import {createSwapUtlityScreen } from './helper/screens/appScreen';
 import { makeApiRequest } from '../src/helper/api'
 import { addFormListener } from "./helper/screens/formValidation";
 import { appURL } from "./helper/config/constant";
@@ -16,7 +16,7 @@ class SwapUtility {
         try {
             $(document).ready(async function() {
                 const data = await makeApiRequest(appURL.fetchApp,'POST',{ appId }).then(data=>data[0])
-                this.element = await getElementByIdOrCreate(screenId,appId,data)
+                this.element = await createSwapUtlityScreen(screenId,appId,data)
                 addFormListener(appId)
             })
             this.bootUp = true
