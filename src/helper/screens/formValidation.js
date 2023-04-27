@@ -1,4 +1,5 @@
 import { makeApiRequest } from "../api"
+import { appURL } from "../config/constant"
 
 export const addFormListener = (appId) => {
     console.log(appId)
@@ -11,7 +12,7 @@ export const addFormListener = (appId) => {
             "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
             "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
         }
-        const data = await makeApiRequest('http://localhost:8001/api/v1/app/get-quote','POST',payload)
+        const data = await makeApiRequest(appURL.getQuotes,'POST',payload)
         console.log(data)
         alert('Latest quote recieved')
     });
@@ -22,7 +23,7 @@ export const addFormListener = (appId) => {
             "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
             "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
         }
-        const data = await makeApiRequest('http://localhost:8001/api/v1/app/swap-token','POST',payload)
+        const data = await makeApiRequest(appURL.swapToken,'POST',payload)
         console.log(data)
         alert('swap raw tx recieved')
     });
