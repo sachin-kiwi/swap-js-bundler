@@ -1,5 +1,6 @@
 import { makeApiRequest } from '../api'
 import { appURL, appName, ACTIONS } from '../config/constant'
+import AlertComponent from './alertScreen'
 import { createSearchKeyWord } from './utilities'
 import $ from 'jquery'
 
@@ -38,12 +39,13 @@ export const SwapScreen = (props) => {
 }
 
 export const swapFormListener = (appId) => {
+  const alertBox = new AlertComponent(appId)
   const quoteBtn = document.getElementById(`get-quote-${appId}`)
   const swapBtn = document.getElementById(`swap-token-${appId}`)
   const exchangeBtn = document.getElementById(`exchange-icon-${appId}`)
   quoteBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    const isValid = swapScreenFormValidation(appId)
+    const isValid = swapScreenFormValidation(appId,alertBox)
     if (!isValid) {
       return
     }
@@ -55,7 +57,7 @@ export const swapFormListener = (appId) => {
     }
     const data = await makeApiRequest(appURL.getQuotes, ACTIONS.post, payload)
     console.log(data)
-    console.log('Latest quote recieved')
+    alertBox.showAlert('Latest quote recieved')
   })
   exchangeBtn.addEventListener('click', async function (e) {
     e.preventDefault()
@@ -75,16 +77,16 @@ export const swapFormListener = (appId) => {
     }
     const data = await makeApiRequest(appURL.swapToken, ACTIONS.post, payload)
     console.log(data)
-    console.log('swap raw tx recieved')
+    alertBox.showAlert('swap raw tx recieved')
   })
 }
 
-export const swapScreenFormValidation = (appId) => {
+export const swapScreenFormValidation = (appId,alertBox) => {
   const tokenA = $(createSearchKeyWord(`tokenA-value-${appId}`, 'id')).val()
   const tokenB = $(createSearchKeyWord(`tokenB-value-${appId}`, 'id')).val()
   console.log(tokenA, tokenB)
   if (tokenA === '' || tokenB === '') {
-    console.log('please enter all details before submitting')
+    alertBox.showAlert('please enter all details before submitting')
     return false
   }
   return true
