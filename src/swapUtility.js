@@ -1,8 +1,7 @@
 import $ from "jquery";
-import {createSwapUtlityScreen } from './helper/screens/appScreen';
+import {FormListener, createSwapUtlityScreen,switchAppScreen } from './helper/screens/appScreen';
 import { makeApiRequest } from '../src/helper/api'
-import { swapFormListener } from "./helper/screens/swapScreen";
-import { appURL } from "./helper/config/constant";
+import { ACTIONS, appURL } from "./helper/config/constant";
 
 class SwapUtility {
     constructor({screenId, appId}) {
@@ -15,14 +14,20 @@ class SwapUtility {
     async init(screenId,appId){
         try {
             $(document).ready(async function() {
-                const data = await makeApiRequest(appURL.fetchApp,'POST',{ appId }).then(data=>data[0])
+                const data = await makeApiRequest(appURL.fetchApp,ACTIONS.post,{ appId }).then(data=>data[0])
                 this.element = await createSwapUtlityScreen(screenId,appId,data)
-                swapFormListener(appId)
+                FormListener('swapScreen',appId)
+                this.screenName = 'swapScreen'
             })
             this.bootUp = true
         } catch (error) {
             console.log(error)
         }
+    }
+    async switchScreen(screenName){
+        // in case already in same screen then do nothing
+        this.element = await switchAppScreen(this.screenId,this.appId,screenName)
+        FormListener(this.appId,screenName)
     }
 
 }

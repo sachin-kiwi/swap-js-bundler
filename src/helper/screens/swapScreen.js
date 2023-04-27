@@ -1,11 +1,11 @@
 import { makeApiRequest } from "../api"
-import { appURL } from "../config/constant"
+import { appURL,appName, ACTIONS } from "../config/constant"
 
 export const SwapScreen = (props)=>{
     const {appId,data:{addressPair}} = props
     return <>
         <section id={`swap-utlity-container-${appId}`}>
-            <h1 id={`title-${appId}`}>Swap Utility</h1>
+            <h1 id={`title-${appId}`}>{`${appName}`}</h1>
             <form id={`swap-utility-form-${appId}`}>
                 <label form="tokenA">{`${addressPair[0].name}`}</label>
                 <input type="text" id={`tokenA-value-${appId}`} placeholder={`${addressPair[0].symbol}`}/>
@@ -32,7 +32,7 @@ export const swapFormListener = (appId) => {
             "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
             "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
         }
-        const data = await makeApiRequest(appURL.getQuotes,'POST',payload)
+        const data = await makeApiRequest(appURL.getQuotes,ACTIONS.post,payload)
         console.log(data)
         alert('Latest quote recieved')
     });
@@ -43,7 +43,7 @@ export const swapFormListener = (appId) => {
             "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
             "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
         }
-        const data = await makeApiRequest(appURL.swapToken,'POST',payload)
+        const data = await makeApiRequest(appURL.swapToken,ACTIONS.post,payload)
         console.log(data)
         alert('swap raw tx recieved')
     });

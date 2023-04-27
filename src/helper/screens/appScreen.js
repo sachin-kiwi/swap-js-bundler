@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { SwapScreen } from './swapScreen'
+import { SwapScreen, swapFormListener } from './swapScreen'
 import { jsxToHtml } from './utilities'
 
 export const getAppScreen = async (appId,data) => {
@@ -45,4 +45,16 @@ const clearComponent = (id,type='id')=>{
     $(name).empty()
     console.log(`Component is empty now :${name}`)
   }
+}
+
+export const FormListener = (screenName,appId)=>{
+  if (screenName === 'swapScreen'){
+    swapFormListener(appId)
+  }else{
+    //do nothing
+  }
+}
+
+export const switchAppScreen = (screenId,appId,screenName) =>{
+  return ``
 }

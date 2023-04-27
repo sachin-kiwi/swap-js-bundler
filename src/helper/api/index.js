@@ -1,6 +1,7 @@
 import $ from "jquery";
+import { ACTIONS } from "../config/constant";
 
-function makeApiRequest(url,type='GET',data={}) {
+function makeApiRequest(url,type=ACTIONS.get,data={}) {
   return $.ajax({
     url,
     type,
