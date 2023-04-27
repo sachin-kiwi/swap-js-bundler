@@ -38,10 +38,11 @@ export const swapFormListener = (appId) => {
         if (!isValid){
             return
         }
+        const {from,to} = await fetchInputDetails(appId)
         const payload ={
             appId,
-            "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
-            "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
+            from,
+            to
         }
         const data = await makeApiRequest(appURL.getQuotes,ACTIONS.post,payload)
         console.log(data)
@@ -57,10 +58,11 @@ export const swapFormListener = (appId) => {
         if (!isValid){
             return
         }
-        const payload = {
+        const {from,to} = await fetchInputDetails(appId)
+        const payload ={
             appId,
-            "to":"0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
-            "from":"0x417B9b9d68529bfE7e1379126acE178156C57f37"
+            from,
+            to
         }
         const data = await makeApiRequest(appURL.swapToken,ACTIONS.post,payload)
         console.log(data)
@@ -85,7 +87,6 @@ const setExchangeFields = (appId) => {
     const [tokenAInput, tokenALabel, tokenBInput, tokenBLabel] = [
         '#tokenA input', '#tokenA label', '#tokenB input', '#tokenB label'
     ].map(selector => form.querySelector(selector));
-
     const [placeholderA, placeholderB] = [tokenAInput, tokenBInput].map(input => input.placeholder);
     const [dataA, dataB] = [tokenAInput, tokenBInput].map(input => input.dataset.address);
     const [labelA, labelB] = [tokenALabel,tokenBLabel].map(input=>input.innerHTML);
@@ -118,3 +119,20 @@ const setExchangeFields = (appId) => {
         console.log(error);
     }
 };
+
+const fetchInputDetails = (appId)=>{
+    try {
+        const form = document.getElementById(`swap-utility-form-${appId}`);
+        if (!form) return;
+        
+        const [tokenAInput, tokenALabel, tokenBInput, tokenBLabel] = [
+        '#tokenA input', '#tokenA label', '#tokenB input', '#tokenB label'
+        ].map(selector => form.querySelector(selector));
+        const [tokenA, tokenB] = [tokenAInput, tokenBInput].map(input => {
+            return {address:input.dataset.address,amount:input.value}
+        });
+        return {from:tokenA.address,amountIn:tokenA.amount,to:tokenB.address,amountOut:tokenB.amount}
+    } catch (error) {
+        console.log(error)
+    }
+}
