@@ -25,14 +25,15 @@ export default class Dapp {
         this.client.clearState()
       }
       await this.client.autoConnect()
-      console.log(this.client.data.account)
+      console.log('app status',this.client.status)
     }
 
-    async disconnect(){
+    async disconnectApp(){
         try {
             await disconnect()
             this.connector = null
             this.address = null
+            console.log('app status',this.client.status)
         } catch (error) {
             return {error,hasError:true}
         }

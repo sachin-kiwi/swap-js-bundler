@@ -43,7 +43,7 @@ export const SwapScreen = (props) => {
   `
 }
 
-export const swapFormListener = (appId) => {
+export const swapFormListener = (appId,dapp) => {
   const alertBox = new AlertComponent(appId)
   const quoteBtn = document.getElementById(`get-quote-${appId}`)
   const swapBtn = document.getElementById(`swap-token-${appId}`)
@@ -90,6 +90,7 @@ export const swapFormListener = (appId) => {
     const walletScreen = document.getElementById(`walletScreen-container-${appId}`)
     swapScreen.style.display = 'none'
     walletScreen.style.display = 'block'
+    await dapp.disconnectApp()
     alertBox.showAlert('Disconnected','info')
 
   })
