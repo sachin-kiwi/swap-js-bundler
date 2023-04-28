@@ -11,7 +11,7 @@ export const getAppScreen = async (appId,data) => {
       throw new Error('Fetched empty Data for screen populate.Please check with admin')
     }
     // ui = screenName === 'swapScreen'? SwapScreen({appId,data}) :  WalletScreen({appId,data})
-    ui = SwapScreen({appId,data}) +  WalletScreen({appId,data})
+    ui = appScreen({appId,data})
   } catch (error) {
     console.log(error)
     ui = `<div>Something Went Wrong.Please checks console</div>`
@@ -56,7 +56,12 @@ const clearComponent = (id,type='id')=>{
   }
 }
 
-export const FormListener = (screenName,appId)=>{
-  swapFormListener(appId)
-  walletFormListener(appId)
+export const FormListener = (screenName,appId,dapp)=>{
+  swapFormListener(appId,dapp)
+  walletFormListener(appId,dapp)
+}
+
+export const appScreen = ({appId,data})=>{
+  const childScreen  = SwapScreen({appId,data}) +  WalletScreen({appId,data})
+  return `<section id=appScreen-${appId}>${childScreen}</section>`
 }

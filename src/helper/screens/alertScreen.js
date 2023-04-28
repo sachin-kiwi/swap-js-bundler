@@ -3,12 +3,14 @@ import { alertColorSchema } from "../config/constant";
 export default class Alert {
   constructor(appId) {
     const element = document.getElementById(`alert-popup-${appId}`)
+    const mainScreen = document.getElementById(`appScreen-${appId}`) || document.body
     if (element){
         this.popup = element
     }else{
         this.popup = document.createElement('div');
         this.popup.id=`alert-popup-${appId}`;
-        document.body.appendChild(this.popup)   
+        mainScreen.appendChild(this.popup)
+        mainScreen.appendChild(this.popup)
     }
     this.popup.style.display = 'none';
     this.popup.style.position = 'fixed';
