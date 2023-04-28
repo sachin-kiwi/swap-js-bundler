@@ -1,17 +1,16 @@
-import { configureChains, createClient, mainnet,connect,InjectedConnector,disconnect } from '@wagmi/core'
+import { configureChains, createClient, mainnet,InjectedConnector } from '@wagmi/core'
 import { publicProvider } from '@wagmi/core/providers/public'
 export default class Dapp {
     constructor(appName,appId){
-        this.appName = appName
-        this.appId = appId
+        this.data = {
+            appName,appId,walletName:'',address:''
+        }
         const { chains, provider,  } = configureChains(
             [mainnet],
             [publicProvider()],
         )
-        this.name =''
-        this.wallet=''
-        this.provider = provider
-        this.chains = chains
+        this.data.provider = provider
+        this.data.chains = chains
         this.client = createClient({
             autoConnect: true,
             provider,
@@ -21,29 +20,14 @@ export default class Dapp {
     }
 
     async connectApp(){
-      if (this.client.status === 'connected'){
-        this.client.clearState()
-      }
-      await this.client.autoConnect()
       console.log('app status',this.client.status)
     }
 
     async disconnectApp(){
-        try {
-            await disconnect()
-            this.connector = null
-            this.address = null
-            console.log('app status',this.client.status)
-        } catch (error) {
-            return {error,hasError:true}
-        }
         return {hasError:false}
     }
 
     toString(){
-        return JSON.stringify({
-            name:this.appName,
-            address:this.address
-        })
+        return JSON.stringify(this.data)
     }
 }
