@@ -1,7 +1,7 @@
 import { makeApiRequest } from '../api'
 import { appURL, appName, ACTIONS } from '../config/constant'
 import AlertComponent from './alertScreen'
-import { createSearchKeyWord } from './utilities'
+import { createSearchKeyWord, removeListener } from './utilities'
 import $ from 'jquery'
 
 export const SwapScreen = (props) => {
@@ -24,7 +24,7 @@ export const SwapScreen = (props) => {
     </div>
     <div id="misc-${appId}" style="margin-bottom:1rem;">
     <label form="slippage" id="slippage-label-${appId}" style="font-weight: bold;">Tolerance (%)</label>
-    <input type="number" id="slippage-value-${appId}" placeholder="0" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    <input type="number" id="slippage-value-${appId}" placeholder="0" min=0 max=25 step="0.1" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
     <div id="misc-options-${appId}" style="margin-bottom: 1rem;">
     <label form="raw-tx" style="font-weight: bold;">Is Raw Tx?</label>
     <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
@@ -43,7 +43,7 @@ export const SwapScreen = (props) => {
   `
 }
 
-export const swapFormListener = (appId) => {
+export const swapFormListener = (appId,dapp) => {
   const alertBox = new AlertComponent(appId)
   const quoteBtn = document.getElementById(`get-quote-${appId}`)
   const swapBtn = document.getElementById(`swap-token-${appId}`)
@@ -90,6 +90,7 @@ export const swapFormListener = (appId) => {
     const walletScreen = document.getElementById(`walletScreen-container-${appId}`)
     swapScreen.style.display = 'none'
     walletScreen.style.display = 'block'
+    await dapp.disconnectApp()
     alertBox.showAlert('Disconnected','info')
 
   })
@@ -146,4 +147,13 @@ const fetchInputDetails = (appId,alertBox) => {
     console.log(error)
     alertBox.showAlert(error.message)
   }
+}
+
+export const removeSwapScreenListener = (appId) =>{
+  const elements = document.querySelectorAll([`get-quote-${appId}`,`#swap-token-${appId}`,`#exchange-icon-${appId}`,`#disConnect-swapScreen-${appId}`])
+  elements.forEach(element=>{
+    if (element){
+      removeListener(element,'click')
+    }
+  })
 }

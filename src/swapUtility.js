@@ -1,7 +1,8 @@
 import $ from "jquery";
-import {FormListener, createSwapUtlityScreen,switchAppScreen } from './helper/screens/appScreen';
+import {FormListener, createSwapUtlityScreen } from './helper/screens/appScreen';
 import { makeApiRequest } from '../src/helper/api'
 import { ACTIONS, appURL } from "./helper/config/constant";
+import Dapp from "./helper/utils/dapp"
 
 class SwapUtility {
     constructor({screenId, appId}) {
@@ -20,22 +21,18 @@ class SwapUtility {
                 } catch (error) {
                     console.log(error)
                 }
-                const {element,hasError,screenName} = await createSwapUtlityScreen(screenId,appId,data,'walletScreen')
+                const {element,hasError,screenName, dapp} = await createSwapUtlityScreen([screenId,appId].join("-"),appId,data,'walletScreen')
                 this.element = element
-                !hasError && FormListener(screenName,appId)
-                this.screenName = screenName
+                this.dapp = dapp
             })
             this.bootUp = true
+            // For Development usage only. It needs to be check
+            // Possible EventEmitter memory leak detected. 11 accountsChanged listeners added. Use emitter.setMaxListeners() to increase limit
+            // EventEmitter.setMaxListeners(20)
         } catch (error) {
             console.log(error)
         }
     }
-    async switchScreen(screenName){
-        // in case already in same screen then do nothing
-        this.element = await switchAppScreen(this.screenId,this.appId,screenName)
-        FormListener(this.appId,screenName)
-    }
-
 }
 
 export default SwapUtility;

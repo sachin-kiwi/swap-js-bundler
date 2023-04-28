@@ -1,7 +1,9 @@
 import $ from 'jquery'
-import { SwapScreen, swapFormListener } from './swapScreen'
+import { SwapScreen, removeSwapScreenListener, swapFormListener } from './swapScreen'
 import { createSearchKeyWord } from './utilities'
-import { WalletScreen, walletFormListener } from './walletScreen'
+import { WalletScreen, removeWalletScreenListener, walletFormListener } from './walletScreen'
+import Dapp from '../utils/dapp'
+import { ErrorScreen } from './errorScreens'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -11,35 +13,43 @@ export const getAppScreen = async (appId,data) => {
       throw new Error('Fetched empty Data for screen populate.Please check with admin')
     }
     // ui = screenName === 'swapScreen'? SwapScreen({appId,data}) :  WalletScreen({appId,data})
-    ui = SwapScreen({appId,data}) +  WalletScreen({appId,data})
+    ui = appScreen({appId,data})
   } catch (error) {
     console.log(error)
-    ui = `<div>Something Went Wrong.Please checks console</div>`
+    ui = ErrorScreen({appId})
     hasError = true
   }
   return {ui,hasError}
 }
 
-export const createSwapUtlityScreen = async (screenId, appId,data) => {
+export const createSwapUtlityScreen = async (screenId, appId,data,screenName) => {
   let element = null
   let hasError = false
-  let screen
+  let dapp = null
+  let errorMessage = null
   try {
     element = document.getElementById(screenId)
     if (!element) {
       element = createComponent(screenId)
       console.log('created swap utlity screen element')
+      const {ui,hasError:foundError} = await getAppScreen(appId,data)
+      hasError = foundError === true
+      element.innerHTML = ui
+      if (!hasError){
+        dapp = new Dapp(`app-${appId}`,appId)
+        FormListener(screenName,appId,dapp)
+      }
     }
     // Element already exists, check if it's unique and has no child elements
-    // If Child exist then remove them first before changing html
-    clearComponent(screenId)
-    const {ui,hasError:foundError} = await getAppScreen(appId,data)
-    hasError = foundError === true
-    element.innerHTML = ui
+    // If Child exist then do nothing screens to current
+    // clearComponent(screenId)
+    // element.innerHTML = ui
   } catch (error) {
+    hasError = true
     console.log(error)
+    errorMessage = error.message
   }
-  return {element,hasError}
+  return {element,hasError,dapp,errorMessage}
 }
 
 const createComponent = (id,type='div')=>{
@@ -57,11 +67,19 @@ const clearComponent = (id,type='id')=>{
   }
 }
 
-export const FormListener = (screenName,appId)=>{
-  swapFormListener(appId)
-  walletFormListener(appId)
+export const FormListener = (screenName,appId,dapp)=>{
+  walletFormListener(appId,dapp)
+  swapFormListener(appId,dapp)
+  // if (screenName === 'walletScreen'){
+  //   walletFormListener(appId,dapp)
+  //   removeSwapScreenListener(appId)
+  // } else{
+  //   swapFormListener(appId,dapp)
+  //   removeWalletScreenListener(appId)
+  // }
 }
 
-export const switchAppScreen = (screenId,appId,screenName) =>{
-  return ``
+export const appScreen = ({appId,data})=>{
+  const childScreen  = SwapScreen({appId,data}) +  WalletScreen({appId,data})
+  return `<section id=appScreen-${appId}>${childScreen}</section>`
 }
