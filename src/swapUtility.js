@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {FormListener, createSwapUtlityScreen,switchAppScreen } from './helper/screens/appScreen';
+import {FormListener, createSwapUtlityScreen } from './helper/screens/appScreen';
 import { makeApiRequest } from '../src/helper/api'
 import { ACTIONS, appURL } from "./helper/config/constant";
 
@@ -30,12 +30,6 @@ class SwapUtility {
             console.log(error)
         }
     }
-    async switchScreen(screenName){
-        // in case already in same screen then do nothing
-        this.element = await switchAppScreen(this.screenId,this.appId,screenName)
-        FormListener(this.appId,screenName)
-    }
-
 }
 
 export default SwapUtility;

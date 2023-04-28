@@ -23,7 +23,6 @@ export const getAppScreen = async (appId,data) => {
 export const createSwapUtlityScreen = async (screenId, appId,data) => {
   let element = null
   let hasError = false
-  let screen
   try {
     element = document.getElementById(screenId)
     if (!element) {
@@ -60,8 +59,4 @@ const clearComponent = (id,type='id')=>{
 export const FormListener = (screenName,appId)=>{
   swapFormListener(appId)
   walletFormListener(appId)
-}
-
-export const switchAppScreen = (screenId,appId,screenName) =>{
-  return ``
 }
