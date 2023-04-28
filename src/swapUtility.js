@@ -21,11 +21,9 @@ class SwapUtility {
                 } catch (error) {
                     console.log(error)
                 }
-                const {element,hasError,screenName} = await createSwapUtlityScreen([screenId,appId].join("-"),appId,data,'walletScreen')
+                const {element,hasError,screenName, dapp} = await createSwapUtlityScreen([screenId,appId].join("-"),appId,data,'walletScreen')
                 this.element = element
-                this.dapp = new Dapp(`app-${appId}`,appId)
-                !hasError && FormListener(screenName,appId,this.dapp)
-                this.screenName = screenName
+                this.dapp = dapp
             })
             this.bootUp = true
             // For Development usage only. It needs to be check

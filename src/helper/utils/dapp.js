@@ -20,10 +20,11 @@ export default class Dapp {
     }
 
     async connectApp(){
-      console.log('app status',this.client.status)
+      console.log('[connectApp] app status',this.client.status)
     }
 
     async disconnectApp(){
+        console.log('[disconnectApp] app status',this.client.status)
         return {hasError:false}
     }
 

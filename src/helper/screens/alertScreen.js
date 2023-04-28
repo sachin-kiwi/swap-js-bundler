@@ -10,7 +10,6 @@ export default class Alert {
         this.popup = document.createElement('div');
         this.popup.id=`alert-popup-${appId}`;
         mainScreen.appendChild(this.popup)
-        mainScreen.appendChild(this.popup)
     }
     this.popup.style.display = 'none';
     this.popup.style.position = 'fixed';

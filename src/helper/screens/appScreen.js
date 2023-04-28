@@ -2,6 +2,7 @@ import $ from 'jquery'
 import { SwapScreen, swapFormListener } from './swapScreen'
 import { createSearchKeyWord } from './utilities'
 import { WalletScreen, walletFormListener } from './walletScreen'
+import Dapp from '../utils/dapp'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -20,25 +21,32 @@ export const getAppScreen = async (appId,data) => {
   return {ui,hasError}
 }
 
-export const createSwapUtlityScreen = async (screenId, appId,data) => {
+export const createSwapUtlityScreen = async (screenId, appId,data,screenName) => {
   let element = null
   let hasError = false
+  let dapp = null
+  let errorMessage = null
   try {
     element = document.getElementById(screenId)
     if (!element) {
       element = createComponent(screenId)
       console.log('created swap utlity screen element')
+      const {ui,hasError:foundError} = await getAppScreen(appId,data)
+      hasError = foundError === true
+      element.innerHTML = ui
+      dapp = new Dapp(`app-${appId}`,appId)
+      !hasError && FormListener(screenName,appId,dapp)
     }
     // Element already exists, check if it's unique and has no child elements
-    // If Child exist then remove them first before changing html
-    clearComponent(screenId)
-    const {ui,hasError:foundError} = await getAppScreen(appId,data)
-    hasError = foundError === true
-    element.innerHTML = ui
+    // If Child exist then do nothing screens to current
+    // clearComponent(screenId)
+    // element.innerHTML = ui
   } catch (error) {
+    hasError = true
     console.log(error)
+    errorMessage = error.message
   }
-  return {element,hasError}
+  return {element,hasError,dapp,errorMessage}
 }
 
 const createComponent = (id,type='div')=>{
@@ -57,8 +65,11 @@ const clearComponent = (id,type='id')=>{
 }
 
 export const FormListener = (screenName,appId,dapp)=>{
-  swapFormListener(appId,dapp)
-  walletFormListener(appId,dapp)
+  if (screenName === 'walletScreen'){
+    walletFormListener(appId,dapp)
+  } else{
+    swapFormListener(appId,dapp)
+  }
 }
 
 export const appScreen = ({appId,data})=>{
