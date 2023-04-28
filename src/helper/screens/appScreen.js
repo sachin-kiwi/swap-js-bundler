@@ -34,8 +34,10 @@ export const createSwapUtlityScreen = async (screenId, appId,data,screenName) =>
       const {ui,hasError:foundError} = await getAppScreen(appId,data)
       hasError = foundError === true
       element.innerHTML = ui
-      dapp = new Dapp(`app-${appId}`,appId)
-      !hasError && FormListener(screenName,appId,dapp)
+      if (!hasError){
+        dapp = new Dapp(`app-${appId}`,appId)
+        FormListener(screenName,appId,dapp)
+      }
     }
     // Element already exists, check if it's unique and has no child elements
     // If Child exist then do nothing screens to current
