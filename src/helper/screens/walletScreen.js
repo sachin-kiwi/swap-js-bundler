@@ -1,5 +1,7 @@
 import { appName } from '../config/constant'
 import AlertComponent from './alertScreen'
+import { FormListener } from './appScreen'
+import { removeListener } from './utilities'
 
 export const WalletScreen = (props) => {
   const { appId } = props
@@ -31,13 +33,23 @@ export const walletFormListener = (appId, dapp) => {
     alertBox.showAlert('Connected', 'success')
     swapScreen.style.display = 'block'
     walletScreen.style.display = 'none'
+    FormListener('swapScreen',appId)
   })
-  disConnectBtn.addEventListener('click', async function (e) {
-    e.preventDefault()
-    alertBox.showAlert('Disconnected', 'info')
-    connectBtn.style.display = 'block'
-    disConnectBtn.style.display = 'none'
-    swapScreen.style.display = 'none'
-    walletScreen.style.display = 'none'
+  // disConnectBtn.addEventListener('click', async function (e) {
+  //   e.preventDefault()
+  //   alertBox.showAlert('Disconnected', 'info')
+  //   connectBtn.style.display = 'block'
+  //   disConnectBtn.style.display = 'none'
+  //   swapScreen.style.display = 'none'
+  //   walletScreen.style.display = 'none'
+  // })
+}
+
+export const removeWalletScreenListener = (appId) =>{
+  const elements = document.querySelectorAll([`#disConnect-walletScreen-${appId}`,`#connect-${appId}`])
+  elements.forEach(element=>{
+    if (element){
+      removeListener(element,'click')
+    }
   })
 }

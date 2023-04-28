@@ -12,3 +12,11 @@ export const createSearchKeyWord = (ele,type='id') => {
     }
     return result
 }
+
+export const removeListener = (element,type)=>{
+    try {
+        element.removeEventListener(type)
+    } catch (error) {
+        console.log(error)
+    }
+}

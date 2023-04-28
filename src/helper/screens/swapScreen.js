@@ -1,7 +1,7 @@
 import { makeApiRequest } from '../api'
 import { appURL, appName, ACTIONS } from '../config/constant'
 import AlertComponent from './alertScreen'
-import { createSearchKeyWord } from './utilities'
+import { createSearchKeyWord, removeListener } from './utilities'
 import $ from 'jquery'
 
 export const SwapScreen = (props) => {
@@ -147,4 +147,13 @@ const fetchInputDetails = (appId,alertBox) => {
     console.log(error)
     alertBox.showAlert(error.message)
   }
+}
+
+export const removeSwapScreenListener = (appId) =>{
+  const elements = document.querySelectorAll([`get-quote-${appId}`,`#swap-token-${appId}`,`#exchange-icon-${appId}`,`#disConnect-swapScreen-${appId}`])
+  elements.forEach(element=>{
+    if (element){
+      removeListener(element,'click')
+    }
+  })
 }

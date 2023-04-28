@@ -1,7 +1,7 @@
 import $ from 'jquery'
-import { SwapScreen, swapFormListener } from './swapScreen'
+import { SwapScreen, removeSwapScreenListener, swapFormListener } from './swapScreen'
 import { createSearchKeyWord } from './utilities'
-import { WalletScreen, walletFormListener } from './walletScreen'
+import { WalletScreen, removeWalletScreenListener, walletFormListener } from './walletScreen'
 import Dapp from '../utils/dapp'
 
 export const getAppScreen = async (appId,data) => {
@@ -67,8 +67,10 @@ const clearComponent = (id,type='id')=>{
 export const FormListener = (screenName,appId,dapp)=>{
   if (screenName === 'walletScreen'){
     walletFormListener(appId,dapp)
+    removeSwapScreenListener(appId)
   } else{
     swapFormListener(appId,dapp)
+    removeWalletScreenListener(appId)
   }
 }
 
