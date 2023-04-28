@@ -65,13 +65,15 @@ const clearComponent = (id,type='id')=>{
 }
 
 export const FormListener = (screenName,appId,dapp)=>{
-  if (screenName === 'walletScreen'){
-    walletFormListener(appId,dapp)
-    removeSwapScreenListener(appId)
-  } else{
-    swapFormListener(appId,dapp)
-    removeWalletScreenListener(appId)
-  }
+  walletFormListener(appId,dapp)
+  swapFormListener(appId,dapp)
+  // if (screenName === 'walletScreen'){
+  //   walletFormListener(appId,dapp)
+  //   removeSwapScreenListener(appId)
+  // } else{
+  //   swapFormListener(appId,dapp)
+  //   removeWalletScreenListener(appId)
+  // }
 }
 
 export const appScreen = ({appId,data})=>{

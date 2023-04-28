@@ -13,6 +13,7 @@ export const createSearchKeyWord = (ele,type='id') => {
     return result
 }
 
+// Todo: Currently Integration is incomplete
 export const removeListener = (element,type)=>{
     try {
         element.removeEventListener(type)
