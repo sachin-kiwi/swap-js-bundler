@@ -3,6 +3,7 @@ import { SwapScreen, removeSwapScreenListener, swapFormListener } from './swapSc
 import { createSearchKeyWord } from './utilities'
 import { WalletScreen, removeWalletScreenListener, walletFormListener } from './walletScreen'
 import Dapp from '../utils/dapp'
+import { ErrorScreen } from './errorScreens'
 
 export const getAppScreen = async (appId,data) => {
   let ui = ''
@@ -15,7 +16,7 @@ export const getAppScreen = async (appId,data) => {
     ui = appScreen({appId,data})
   } catch (error) {
     console.log(error)
-    ui = `<div>Something Went Wrong.Please checks console</div>`
+    ui = ErrorScreen({appId})
     hasError = true
   }
   return {ui,hasError}

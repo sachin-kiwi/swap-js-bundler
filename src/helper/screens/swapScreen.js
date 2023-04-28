@@ -24,7 +24,7 @@ export const SwapScreen = (props) => {
     </div>
     <div id="misc-${appId}" style="margin-bottom:1rem;">
     <label form="slippage" id="slippage-label-${appId}" style="font-weight: bold;">Tolerance (%)</label>
-    <input type="number" id="slippage-value-${appId}" placeholder="0" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
+    <input type="number" id="slippage-value-${appId}" placeholder="0" min=0 max=25 step="0.1" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid gray;"/>
     <div id="misc-options-${appId}" style="margin-bottom: 1rem;">
     <label form="raw-tx" style="font-weight: bold;">Is Raw Tx?</label>
     <input type="checkbox" id="rawTx-option-${appId}" name="raw-tx-option" checked="true"/>
